@@ -31,6 +31,7 @@ app.post('/usuario', async (req,res) => {
     
 })
 app.get('/usuarios',(req,res) => {
+    //Usuario.find().populate('peliculas');
     console.log("GET USUARIOS")
 })
 

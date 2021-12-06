@@ -5,7 +5,9 @@ const usuarioSchema = new Schema({
     nombre: {type: String, required:true},
     contrasenia: {String},
     admin: {type: Boolean, default:false},
-    peliculas: {type:String}//TODO vincular con peliculas
+    peliculas: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Pelicula'        }//TODO vincular con peliculas
 })
 const Usuario = mongoose.model('Usuario',usuarioSchema)
 module.exports = Usuario
