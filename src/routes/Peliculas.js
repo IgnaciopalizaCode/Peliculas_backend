@@ -36,11 +36,11 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-//OBTENER
+//OBTENER TODAS
 router.get("/", async (req, res) => {
   try {
     const peliculas = await Pelicula.find();
-    res.status(200).json(peliculas);
+    res.status(200).json(peliculas.reverse());
   } catch (err) {
     res.status(500).json(err);
   }
