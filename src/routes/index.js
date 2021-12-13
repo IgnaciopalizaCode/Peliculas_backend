@@ -4,12 +4,16 @@ const cors = require('cors')
 const database = require('./database.js');
 const  mongoose  = require('mongoose');
 const peliculaRoute = require("./Peliculas")
+const listaPeliculaRoute = require("./ListaPeliculas")
+
 
 
 //middlewares
 app.use(cors())
 app.use(express.json())
 app.use("/api/peliculas", peliculaRoute)
+app.use("/api/listapeliculas", listaPeliculaRoute)
+
 
 //modelos de datos
 const Usuario = require('../models/Usuario')

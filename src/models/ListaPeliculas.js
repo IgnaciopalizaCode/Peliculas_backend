@@ -6,8 +6,9 @@ const listaPeliculasSchema = mongoose.Schema({
   tipo: { type: String },
   contenido: { type: Array },
 });
-const ListaPeliculasSchema = mongoose.model(
-  "ListaPeliculasSchema",
+
+const ListaPeliculas = mongoose.model(
+  "ListaPeliculas",
   listaPeliculasSchema
 );
-module.exports = ListaPeliculasSchema;
+module.exports = ListaPeliculas;
