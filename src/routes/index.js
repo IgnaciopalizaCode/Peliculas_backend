@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors')
 const database = require('./database.js');
 const  mongoose  = require('mongoose');
+const bcrypt = require('bcrypt');
 //middlewares
 app.use(cors())
 app.use(express.json())
@@ -31,6 +32,11 @@ app.post('/usuario', async (req,res) => {
     
 })
 app.get('/usuarios',(req,res) => {
+    //Usuario.find().populate('peliculas');
+    console.log("GET USUARIOS")
+})
+app.get('/usuarios/:nombre',(req,res) => {
+    let nombre= req.params.nombre;
     //Usuario.find().populate('peliculas');
     console.log("GET USUARIOS")
 })
