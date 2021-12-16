@@ -7,7 +7,35 @@ const usuarioSchema = new Schema({
     admin: {type: Boolean, default:false},
     peliculas: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pelicula'        }//TODO vincular con peliculas
+        ref: 'Pelicula'        },//TODO vincular con peliculas
+    eliminado: {type: Boolean, default:false}
 })
 const Usuario = mongoose.model('Usuario',usuarioSchema)
+
+
+function getUsuarioByNombre(nombreU){
+    const usuario = Usuario.findOne(nombreU);
+    const user = Usuario.findOne({nombre: nombreU});
+    console.log(usuario);
+    console.log(user);
+    return usuario;
+}
+const getUsuario=()=>{
+    const usuario = Usuario.find();
+    return usuario;
+}
+const createUsuario=(data,password)=>{
+    let {email,nombre,admin,eliminado} = data;
+    let user= {
+        email,
+        nombre,
+        contrasenia: password,
+        admin,
+        eliminado
+    };
+    const usuario = Usuario.create(user);
+    return usuario;
+}
+
+
 module.exports = Usuario
