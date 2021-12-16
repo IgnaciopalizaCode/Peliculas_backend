@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const app = express();
 const cors = require('cors')
 const database = require('./database.js');
@@ -8,7 +8,8 @@ app.use(cors())
 app.use(express.json())
 //modelos de datos
 const Usuario = require('../models/Usuario')
-const Pelicula = require('../models/Pelicula')
+const Pelicula = require('../models/Pelicula');
+const { request, response } = require('express');
 
 console.log("ejecutado en index js")
 app.listen(process.env.PORT, ()=>{
@@ -71,4 +72,58 @@ app.delete('/pelicula',(req,res) => {
     console.log("DELETE pelicula")
 })
 
+app.post('/register', (req, res))
+{
+    const{nombre, email, contrasenia} = req.body;
+    Usuario.findOne({email: email}, (err,user) => 
+    {
+      if(user)
+      {
+        res.send({message:'Ya existe un usuario con ese correo'});
+      }
+      else
+      {
+        const newUser = new Usuario({
+            nombre,
+            email,
+            contrasenia
+        })
+        newUser.save(err => {
+           if(err)
+           {
+               res.send(err);
+           }
+           else
+           {
+               res.send('Registro Existoso');
+           }
 
+        })
+
+      }
+
+    })
+  
+}
+
+app.post('/logIn' ,(req ,res))
+{
+    const {nombre, contrasenia} = req.body;
+    Usuario.findOne({nombre: nombre}, (err, user) => {
+        if(user)
+        {
+            if(contrasenia === user.contrasenia)
+            {
+              res.send("Inicio de sesion exitoso");
+            }
+            else
+            {
+              res.send("Contraseña Incorrecta");
+            }
+        }else
+        {
+            res.send("Usuario Inexistente");
+        }
+        
+    })
+}
