@@ -78,7 +78,7 @@ app.delete('/pelicula',(req,res) => {
     console.log("DELETE pelicula")
 })
 
-app.post('/register', (req, res))
+app.post('/register', (req, res) => 
 {
     const{nombre, email, contrasenia} = req.body;
     Usuario.findOne({email: email}, (err,user) => 
@@ -110,10 +110,10 @@ app.post('/register', (req, res))
 
     })
   
-}
+})
 
-app.post('/logIn' ,(req ,res))
-{
+
+app.post('/logIn' ,(req ,res) => {
     const {nombre, contrasenia} = req.body;
     Usuario.findOne({nombre: nombre}, (err, user) => {
         if(user)
@@ -132,4 +132,5 @@ app.post('/logIn' ,(req ,res))
         }
         
     })
-}
+})
+
