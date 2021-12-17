@@ -11,8 +11,13 @@ app.use(express.json())
 const Usuario = require('../models/Usuario')
 const Pelicula = require('../models/Pelicula');
 const { request, response } = require('express');
+const { mongo } = require('mongoose');
+const { Mongoose } = require('mongoose');
+require('dotenv').config();
 
 console.log("ejecutado en index js")
+mongoose.connect("mongodb://127.0.0.1:27017/finaldb1").then(console.log("conectado a finaldb1"));
+
 app.listen(process.env.PORT, ()=>{
     console.log(`ejecutando servidor en puerto ${process.env.PORT}`)
 })
@@ -80,7 +85,14 @@ app.delete('/pelicula',(req,res) => {
 
 app.post('/register', (req, res) => 
 {
-    const{nombre, email, contrasenia} = req.body;
+    let data = req.body
+
+    const email = data.email;
+    const nombre = data.nombre;
+    const contrasenia = data.contrasenia;
+    const admin = false;
+    const peliculas = [];
+    const eliminado = false;
     Usuario.findOne({email: email}, (err,user) => 
     {
       if(user)
@@ -89,30 +101,26 @@ app.post('/register', (req, res) =>
       }
       else
       {
-        const newUser = new Usuario({
+        
+        let newUser = {
             nombre,
             email,
-            contrasenia
-        })
-        newUser.save(err => {
-           if(err)
-           {
-               res.send(err);
-           }
-           else
-           {
-               res.send('Registro Existoso');
-           }
+            contrasenia,
+        };
 
-        })
-
+        const usuario = Usuario.create(newUser);
+        
+        if(usuario)
+        {
+            res.send({message:"Registro Exitoso"});
+        }
+        else
+        {
+            res.send({message:"Datos Invalidos"})
+        }
       }
-
     })
-  
 })
-
-
 app.post('/logIn' ,(req ,res) => {
     const {nombre, contrasenia} = req.body;
     Usuario.findOne({nombre: nombre}, (err, user) => {

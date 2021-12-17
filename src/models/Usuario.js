@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const {Schema} = mongoose;
 const usuarioSchema = new Schema({
     email: {type: String},
-    nombre: {type: String, required:true},
+    nombre: {type: String},
     contrasenia: {String},
     admin: {type: Boolean, default:false},
     peliculas: {
