@@ -8,7 +8,7 @@ const peliculaSchema = mongoose.Schema({
   duracion: { type: String },
   trailer: { type: String },
   imagen: { type: String },
-  fecha_de_Estreno: { type: String },
+  fecha_de_Estreno: { type: Number },
   sinopsis: { type: String },
   genero: { type: String },
   publicado: { type: Boolean },
