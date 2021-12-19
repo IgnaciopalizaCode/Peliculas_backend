@@ -7,6 +7,8 @@ router.post("/", async (req, res) => {
   try {
     const peliculaGuardada = await nuevaPelicula.save();
     res.status(201).json(peliculaGuardada);
+    toastr.success('Proceso exitoso')
+
   } catch (err) {
     res.status(500).json(err);
   }

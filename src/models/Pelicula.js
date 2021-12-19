@@ -12,7 +12,8 @@ const peliculaSchema = mongoose.Schema({
   sinopsis: { type: String },
   genero: { type: String },
   publicado: { type: Boolean },
-  destacado: { type: Boolean, default: false },
+  esPelicula: { type: Boolean, default: true },
+  destacada: { type: Boolean, default: false },
   vista: { type: Boolean, default: false },
 });
 const Pelicula = mongoose.model("Pelicula", peliculaSchema);
