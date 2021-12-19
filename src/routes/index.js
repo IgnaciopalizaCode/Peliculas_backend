@@ -8,11 +8,8 @@ const bcrypt = require('bcrypt');
 app.use(cors())
 app.use(express.json())
 //modelos de datos
-const Usuario = require('../models/Usuario')
+const Usuario = require('../models/Usuario');
 const Pelicula = require('../models/Pelicula');
-const { request, response } = require('express');
-const { mongo } = require('mongoose');
-const { Mongoose } = require('mongoose');
 require('dotenv').config();
 
 console.log("ejecutado en index js")
@@ -86,41 +83,28 @@ app.delete('/pelicula',(req,res) => {
 app.post('/register', (req, res) => 
 {
     let data = req.body
+    
+    let user = Usuario.getUsuarioByEmail(data.email);
 
-    const email = data.email;
-    const nombre = data.nombre;
-    const contrasenia = data.contrasenia;
-    const admin = false;
-    const peliculas = [];
-    const eliminado = false;
-    Usuario.findOne({email: email}, (err,user) => 
-    {
-      if(user)
+        if(user.email === data.email)
+        {
+            res.send("ya existe un usuario registrado con ese correo");
+        }
+       else
       {
-        res.send({message:'Ya existe un usuario con ese correo'});
-      }
-      else
-      {
-        
-        let newUser = {
-            nombre,
-            email,
-            contrasenia,
-        };
-
-        const usuario = Usuario.create(newUser);
-        
+            const usuario = Usuario.createUsuario(data, data.contrasenia);
+        console.log(JSON.stringify(data));  
         if(usuario)
         {
-            res.send({message:"Registro Exitoso"});
+            res.send(usuario);
         }
         else
         {
             res.send({message:"Datos Invalidos"})
         }
-      }
-    })
+       }
 })
+
 app.post('/logIn' ,(req ,res) => {
     const {nombre, contrasenia} = req.body;
     Usuario.findOne({nombre: nombre}, (err, user) => {
@@ -138,7 +122,6 @@ app.post('/logIn' ,(req ,res) => {
         {
             res.send("Usuario Inexistente");
         }
-        
     })
 })
 
