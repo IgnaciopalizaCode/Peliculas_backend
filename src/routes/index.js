@@ -60,30 +60,3 @@ app.delete('/usuarios',(req,res) => {
 
 
 
-// app.post('/pelicula', async (req,res) => {
-//     try{
-//         const data = req.body
-//         //TODO validacion de la data en el servidor
-//         const pelicula = await Pelicula.create(data)
-//         res.json(pelicula)
-//     } catch(e){
-//         console.log(e)
-//     }
-    
-// })
-
-// app.get('/pelicula',(req,res) => {
-//     console.log("GET pelicula")
-// })
-
-// app.put('/pelicula',(req,res) => {
-//     console.log("PUT pelicula")
-// })
-// app.patch('/pelicula',(req,res) => {
-//     console.log("PATCH pelicula")
-// })
-// app.delete('/pelicula',(req,res) => {
-//     console.log("DELETE pelicula")
-// })
-
-
