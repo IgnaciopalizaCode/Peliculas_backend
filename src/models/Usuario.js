@@ -36,6 +36,10 @@ const createUsuario=(data,password)=>{
     const usuario = Usuario.create(user);
     return usuario;
 }
+function getUsuarioByEmail(mailU){
+    const user = Usuario.findOne({email: mailU});
+    console.log(user);
+    return user;
+}
 
-
-module.exports = Usuario
+module.exports = {Usuario, createUsuario, getUsuarioByEmail}
