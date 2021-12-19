@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const app = express();
 const cors = require('cors')
 const database = require('./database.js');
@@ -9,9 +9,15 @@ app.use(cors())
 app.use(express.json())
 //modelos de datos
 const Usuario = require('../models/Usuario')
-const Pelicula = require('../models/Pelicula')
+const Pelicula = require('../models/Pelicula');
+const { request, response } = require('express');
+const { mongo } = require('mongoose');
+const { Mongoose } = require('mongoose');
+require('dotenv').config();
 
 console.log("ejecutado en index js")
+mongoose.connect("mongodb://127.0.0.1:27017/finaldb1").then(console.log("conectado a finaldb1"));
+
 app.listen(process.env.PORT, ()=>{
     console.log(`ejecutando servidor en puerto ${process.env.PORT}`)
 })
@@ -77,4 +83,62 @@ app.delete('/pelicula',(req,res) => {
     console.log("DELETE pelicula")
 })
 
+app.post('/register', (req, res) => 
+{
+    let data = req.body
+
+    const email = data.email;
+    const nombre = data.nombre;
+    const contrasenia = data.contrasenia;
+    const admin = false;
+    const peliculas = [];
+    const eliminado = false;
+    Usuario.findOne({email: email}, (err,user) => 
+    {
+      if(user)
+      {
+        res.send({message:'Ya existe un usuario con ese correo'});
+      }
+      else
+      {
+        
+        let newUser = {
+            nombre,
+            email,
+            contrasenia,
+        };
+
+        const usuario = Usuario.create(newUser);
+        
+        if(usuario)
+        {
+            res.send({message:"Registro Exitoso"});
+        }
+        else
+        {
+            res.send({message:"Datos Invalidos"})
+        }
+      }
+    })
+})
+app.post('/logIn' ,(req ,res) => {
+    const {nombre, contrasenia} = req.body;
+    Usuario.findOne({nombre: nombre}, (err, user) => {
+        if(user)
+        {
+            if(contrasenia === user.contrasenia)
+            {
+              res.send("Inicio de sesion exitoso");
+            }
+            else
+            {
+              res.send("Contraseña Incorrecta");
+            }
+        }else
+        {
+            res.send("Usuario Inexistente");
+        }
+        
+    })
+})
 
