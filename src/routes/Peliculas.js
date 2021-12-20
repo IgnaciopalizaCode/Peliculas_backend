@@ -7,8 +7,6 @@ router.post("/", async (req, res) => {
   try {
     const peliculaGuardada = await nuevaPelicula.save();
     res.status(201).json(peliculaGuardada);
-    toastr.success('Proceso exitoso')
-
   } catch (err) {
     res.status(500).json(err);
   }
@@ -33,6 +31,7 @@ router.delete("/:id", async (req, res) => {
   try {
     await Pelicula.findByIdAndDelete(req.params.id);
     res.status(200).json("La pelicula fue borrada");
+    toast.success("Elemento borrado");
   } catch (err) {
     res.status(500).json(err);
   }
