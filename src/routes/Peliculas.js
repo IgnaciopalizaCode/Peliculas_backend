@@ -57,4 +57,15 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//OBTENER segun genero
+router.get("/filtro/:genero", async (req, res) => {
+  try {
+    const peliculas = await Pelicula.find();
+   const peliculaFiltrada = peliculas.filter(pelicula=>pelicula.genero === req.params.genero)
+    res.status(200).json(peliculaFiltrada);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
