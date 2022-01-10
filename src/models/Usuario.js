@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const {Schema} = mongoose;
 const usuarioSchema = new Schema({
     email: {type: String},
-    nombre: {type: String},
-    contrasenia: {String},
+    nombre: {type: String, required:true},
+    contrasenia: {type: String},
     admin: {type: Boolean, default:false},
     peliculas: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,12 +25,13 @@ const getUsuario=()=>{
     const usuario = Usuario.find();
     return usuario;
 }
-const createUsuario=(data,password)=>{
-    let {email,nombre,admin,eliminado} = data;
+const createUsuario=(data)=>{
+    let {email,nombre,admin,eliminado,contrasenia} = data;
+    let hashpass = bcrypt.hashSync(contrasenia, 8);
     let user= {
         email,
         nombre,
-        contrasenia: password,
+        contrasenia : hashpass,
         admin,
         eliminado
     };
@@ -37,9 +39,15 @@ const createUsuario=(data,password)=>{
     return usuario;
 }
 function getUsuarioByEmail(mailU){
-    const user = Usuario.findOne({email: mailU});
-    console.log(user);
-    return user;
+    const user = Usuario.findOne({email : mailU});
+    if(user !== undefined)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 module.exports = {Usuario, createUsuario, getUsuarioByEmail}
