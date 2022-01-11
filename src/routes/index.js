@@ -23,7 +23,6 @@ require('dotenv').config();
 
 
 console.log("ejecutado en index js")
-mongoose.connect("mongodb://127.0.0.1:27017/finaldb1").then(console.log("conectado a finaldb1"));
 
 app.listen(process.env.PORT, ()=>{
     console.log(`ejecutando servidor en puerto ${process.env.PORT}`)
@@ -71,26 +70,25 @@ app.delete('/usuarios',(req,res) => {
 app.post('/register', (req, res) => 
 {
     let data = req.body
-    
+
     let user = Usuario.getUsuarioByEmail(data.email);
 
-        if(user.email === data.email)
+        if(user)
         {
             res.send("ya existe un usuario registrado con ese correo");
         }
-       else
-      {
-            const usuario = Usuario.createUsuario(data, data.contrasenia);
-        console.log(JSON.stringify(data));  
-        if(usuario)
-        {
-            res.send(usuario);
-        }
         else
         {
-            res.send({message:"Datos Invalidos"})
+            const usuario = Usuario.createUsuario(data);
+            if(usuario)
+            {
+              res.send({message:"Registro Exitoso"});
+            }
+            else
+            {
+              res.send({message:"Datos Invalidos"})
+            }
         }
-       }
 })
 
 app.post('/logIn' ,(req ,res) => {
