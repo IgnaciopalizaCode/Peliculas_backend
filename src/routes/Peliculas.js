@@ -4,8 +4,10 @@ const Pelicula = require("../models/Pelicula");
 //CREAR
 router.post("/", async (req, res) => {
   const nuevaPelicula = new Pelicula(req.body);
+  nuevaPelicula.genero = nuevaPelicula.genero.toLowerCase();
   try {
     const peliculaGuardada = await nuevaPelicula.save();
+
     res.status(201).json(peliculaGuardada);
   } catch (err) {
     res.status(500).json(err);
@@ -58,10 +60,14 @@ router.get("/:id", async (req, res) => {
 });
 
 //OBTENER segun genero
-router.get("/filtro/:genero", async (req, res) => {
+router.get("/filtro/:tipo/:genero", async (req, res) => {
   try {
-    const peliculas = await Pelicula.find();
-   const peliculaFiltrada = peliculas.filter(pelicula=>pelicula.genero === req.params.genero)
+    const tipo = req.params.tipo.toLowerCase() === "pelicula";
+    const busquedaGenero = req.params.genero.toLowerCase();
+    const peliculaFiltrada = await Pelicula.find({
+      esPelicula: tipo,
+      genero: busquedaGenero,
+    });
     res.status(200).json(peliculaFiltrada);
   } catch (err) {
     res.status(500).json(err);

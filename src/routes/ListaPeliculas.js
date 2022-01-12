@@ -15,13 +15,34 @@ router.post("/", async (req, res) => {
 //BORRAR
 router.delete("/:id", async (req, res) => {
   try {
-    await ListaPeliculas.findByIdAndDelete(req.body.id);
-    res.status(201).json("La lista fue borrada");
+    await ListaPeliculas.findByIdAndDelete(req.params.id);
+    res.status(200).json("La pelicula fue borrada");
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+//OBTENER TODAS
+router.get("/", async (req, res) => {
+  try {
+    const listaPeliculas = await ListaPeliculas.find();
+    res.status(200).json(listaPeliculas.reverse());
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+
+//OBTENER SEGUN ID
+router.get("/:id", async (req, res) => {
+  try {
+    const lista = await ListaPeliculas.findById(req.params.id);
+    res.status(200).json(lista);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 // OBTENER SEGUN TIPO
 router.get("/", async (req, res) => {
@@ -37,13 +58,11 @@ router.get("/", async (req, res) => {
     } else {
       lista = await ListaPeliculas.aggregate([{ $sample: { size: 10 } }]);
     }
-    res.status(200).json(lista)
+    res.status(200).json(lista);
   } catch {
-      res.status(500).json(err)
+    res.status(500).json(err);
   }
 });
-
-
 
 //MODIFICAR
 router.put("/:id", async (req, res) => {
