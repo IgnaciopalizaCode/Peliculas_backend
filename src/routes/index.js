@@ -83,8 +83,8 @@ app.post('/register', (req, res) =>
 {
     let data = req.body
 
-    let user = Usuario.getUsuarioByEmail(data.email);
-
+    Usuario.getUsuarioByEmail(data.email)
+    .then((user) => {
         if(user)
         {
             res.send("ya existe un usuario registrado con ese correo");
@@ -101,21 +101,17 @@ app.post('/register', (req, res) =>
               res.send({message:"Datos Invalidos"})
             }
         }
+    });
 })
 
 app.post('/logIn' ,(req ,res) => {
     const {nombre, contrasenia} = req.body;
-    Usuario.findOne({nombre: nombre}, (err, user) => {
+    Usuario.validateLogIn(nombre, contrasenia, (err, user) => {
         if(user)
         {
-            if(contrasenia === user.contrasenia)
-            {
-              res.send("Inicio de sesion exitoso");
-            }
-            else
-            {
-              res.send("Contraseña Incorrecta");
-            }
+            
+            res.send("Inicio de sesion exitoso");
+           
         }else
         {
             res.send("Usuario Inexistente");

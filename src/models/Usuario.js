@@ -40,14 +40,20 @@ const createUsuario=(data)=>{
 }
 function getUsuarioByEmail(mailU){
     const user = Usuario.findOne({email : mailU});
-    if(user !== undefined)
+    return user;
+}
+function validateLogIn(userMail, contrasenia)
+{
+    const user = Usuario.findOne({email : userMail});
+    const hashPassword = bcrypt.hashSync(contrasenia, 8);
+    if(user.contrasenia === hashPassword)
     {
-        return true;
+        return user;
     }
     else
     {
-        return false;
+        console.log("contraseña incorrecta")
     }
 }
 
-module.exports = {Usuario, createUsuario, getUsuarioByEmail}
+module.exports = {Usuario, createUsuario, getUsuarioByEmail, validateLogIn}
