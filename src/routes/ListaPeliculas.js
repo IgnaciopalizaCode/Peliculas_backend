@@ -12,6 +12,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+
 //BORRAR
 router.delete("/:id", async (req, res) => {
   try {
