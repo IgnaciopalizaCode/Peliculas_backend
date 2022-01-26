@@ -7,15 +7,7 @@ router.post("/", async (req, res) => {
   const nuevaPelicula = new Pelicula(req.body);
   nuevaPelicula.genero = nuevaPelicula.genero.toLowerCase();
   try {
-    console.log(Pelicula);
-    const listasPeliculas = await ListaPeliculas.find({genero: nuevaPelicula.genero});
-    //const agregandoContenido =  listasPeliculas[0].contenido
-    //agregandoContenido.push(nuevaPelicula._id)
-  
     const peliculaGuardada = await nuevaPelicula.save();
-
-    console.log(peliculaGuardada);
-    console.log(Listas);
     res.status(201).json(peliculaGuardada);
   } catch (err) {
     res.status(500).json(err);
