@@ -1,15 +1,19 @@
 const express = require('express');
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
+const session = require('express-session');
 const database = require('./database.js');
 const  mongoose  = require('mongoose');
 const bcrypt = require('bcrypt');
 //middlewares
 app.use(cors())
 app.use(express.json())
+
 //modelos de datos
 const Usuario = require('../models/Usuario');
 const Pelicula = require('../models/Pelicula');
+const { Redirect } = require('request/lib/redirect');
+const { redirect } = require('express/lib/response');
 require('dotenv').config();
 
 console.log("ejecutado en index js")
@@ -104,18 +108,27 @@ app.post('/register', (req, res) =>
     });
 })
 
-app.post('/logIn' ,(req ,res) => {
-    const {nombre, contrasenia} = req.body;
-    Usuario.validateLogIn(nombre, contrasenia, (err, user) => {
+app.get('/logIn' ,(req ,res) => {
+    let data = req.body;
+    Usuario.getUsuarioByEmail(data.email)
+    .then((user) => {
         if(user)
         {
-            
-            res.send("Inicio de sesion exitoso");
+            console.log(bcrypt.compareSync(data.contrasenia, user.contrasenia))
+            if(bcrypt.compareSync(data.contrasenia, user.contrasenia))
+            {
+              res.send(user);
+              redirect('/');
+            }
+            else
+            {
+                res.send("Contraseña incorrecta");
+            }
            
         }else
         {
             res.send("Usuario Inexistente");
         }
-    })
+    });
 })
 
