@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { send } = require('express/lib/response');
 const {Schema} = mongoose;
 const usuarioSchema = new Schema({
     email: {type: String},
@@ -40,14 +41,26 @@ const createUsuario=(data)=>{
 }
 function getUsuarioByEmail(mailU){
     const user = Usuario.findOne({email : mailU});
-    if(user !== undefined)
+    return user;
+}
+function validateLogIn(userMail, contrasenia)
+{
+    const user = Usuario.findOne({email : userMail});
+    const hashPassword = bcrypt.hashSync(contrasenia, 8);
+    
+    if(user)
     {
-        return true;
-    }
-    else
-    {
-        return false;
+        console.log(userMail);
+
+        if(user.contrasenia === hashPassword)
+        {
+          return user;
+        }
+        else
+        {
+          console.log("contraseña incorrecta")
+        }
     }
 }
 
-module.exports = {Usuario, createUsuario, getUsuarioByEmail}
+module.exports = {Usuario, createUsuario, getUsuarioByEmail, validateLogIn}
