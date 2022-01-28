@@ -5,9 +5,18 @@ const session = require('express-session');
 const database = require('./database.js');
 const  mongoose  = require('mongoose');
 const bcrypt = require('bcrypt');
+const peliculaRoute = require("./Peliculas")
+const listaPeliculaRoute = require("./ListaPeliculas")
+
+
+
 //middlewares
 app.use(cors())
 app.use(express.json())
+
+app.use("/api/peliculas", peliculaRoute)
+app.use("/api/listapeliculas", listaPeliculaRoute)
+
 
 //modelos de datos
 const Usuario = require('../models/Usuario');
@@ -15,6 +24,7 @@ const Pelicula = require('../models/Pelicula');
 const { Redirect } = require('request/lib/redirect');
 const { redirect } = require('express/lib/response');
 require('dotenv').config();
+
 
 console.log("ejecutado en index js")
 
@@ -57,31 +67,9 @@ app.delete('/usuarios',(req,res) => {
     console.log("DELETE USUARIOS")
 })
 
-app.post('/pelicula', async (req,res) => {
-    try{
-        const data = req.body
-        //TODO validacion de la data en el servidor
-        const pelicula = await Pelicula.create(data)
-        res.json(pelicula)
-    } catch(e){
-        console.log(e)
-    }
-    
-})
 
-app.get('/pelicula',(req,res) => {
-    console.log("GET pelicula")
-})
 
-app.put('/pelicula',(req,res) => {
-    console.log("PUT pelicula")
-})
-app.patch('/pelicula',(req,res) => {
-    console.log("PATCH pelicula")
-})
-app.delete('/pelicula',(req,res) => {
-    console.log("DELETE pelicula")
-})
+
 
 app.post('/register', (req, res) => 
 {
