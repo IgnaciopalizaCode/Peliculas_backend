@@ -12,12 +12,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 //BORRAR
 router.delete("/:id", async (req, res) => {
   try {
     await ListaPeliculas.findByIdAndDelete(req.params.id);
-    res.status(200).json("La pelicula fue borrada");
+    const listaBorrar = await ListaPeliculas.find();
+
+    res.status(200).json({ mensaje: "La pelicula fue borrada", listaBorrar });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -32,8 +33,6 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-
 
 //OBTENER SEGUN ID
 router.get("/:id", async (req, res) => {
@@ -76,6 +75,37 @@ router.put("/:id", async (req, res) => {
     res.status(200).json(listaPeliculasMdificada);
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+//agregar
+router.post("/:idlista/agregarfilm/:idFilm", async (req, res) => {
+  try {
+    const idFilm = req.params.idFilm;
+    const listaPeliculas = await ListaPeliculas.findById(req.params.idlista);
+    listaPeliculas.contenido.push(idFilm);
+
+    await listaPeliculas.save();
+    res.status(200).json(listaPeliculas);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//borrar
+router.delete("/:idLista/borrarfilm/:idFilm", async (req, res) => {
+  try {
+    const idFilm = req.params.idFilm;
+    const idLista = req.params.idLista;
+    const actualizado = await ListaPeliculas.findByIdAndUpdate(
+      idLista,
+      { $pullAll: { contenido: [idFilm] } },
+      { new: true }
+    );
+    res.status(200).json(actualizado);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err);
   }
 });
 
