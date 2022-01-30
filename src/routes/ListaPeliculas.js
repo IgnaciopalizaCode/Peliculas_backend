@@ -47,19 +47,27 @@ router.get("/:id", async (req, res) => {
 // OBTENER SEGUN TIPO
 router.get("/", async (req, res) => {
   const tipoQuery = req.query.tipo;
-  //const generoQuery = req.query.genero;
+  const generoQuery = req.query.genero;
   let lista = [];
   try {
+    console.log("entra aqui");
     if (tipoQuery) {
-      lista = await ListaPeliculas.aggregate([
-        { $sample: { size: 10 } },
-        { $match: { tipo: tipoQuery } },
-      ]);
+      if (generoQuery) {
+        lista = await ListaPeliculas.aggregate([
+          { $sample: { size: 10 } },
+          { $match: { tipo: tipoQuery, genero: generoQuery } },
+        ]);
+      } else {
+        lista = await ListaPeliculas.aggregate([
+          { $sample: { size: 10 } },
+          { $match: { tipo: tipoQuery } },
+        ]);
+      }
     } else {
       lista = await ListaPeliculas.aggregate([{ $sample: { size: 10 } }]);
     }
     res.status(200).json(lista);
-  } catch {
+  } catch (err) {
     res.status(500).json(err);
   }
 });
