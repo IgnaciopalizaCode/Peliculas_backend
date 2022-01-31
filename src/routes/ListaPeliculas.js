@@ -45,12 +45,11 @@ router.get("/:id", async (req, res) => {
 });
 
 // OBTENER SEGUN TIPO
-router.get("/", async (req, res) => {
+router.get("/random", async (req, res) => {
   const tipoQuery = req.query.tipo;
   const generoQuery = req.query.genero;
   let lista = [];
   try {
-    console.log("entra aqui");
     if (tipoQuery) {
       if (generoQuery) {
         lista = await ListaPeliculas.aggregate([

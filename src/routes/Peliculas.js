@@ -49,10 +49,32 @@ router.get("/", async (req, res) => {
   }
 });
 
-//OBTENER
+//OBTENER SEGUN ID
 router.get("/:id", async (req, res) => {
   try {
     const pelicula = await Pelicula.findById(req.params.id);
+    res.status(200).json(pelicula);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//OBTENER RANDOM
+router.get("/random", async (req, res) => {
+  const tipo = req.query.type;
+  let pelicula;
+  try {
+    if (tipo === "series") {
+      movie = await Pelicula.aggregate([
+        { $match: { esPelicula: false } },
+        { $sample: { size: 7 } },
+      ]);
+    } else {
+      pelicula = await Pelicula.aggregate([
+        { $match: { isSeries: true } },
+        { $sample: { size: 7 } },
+      ]);
+    }
     res.status(200).json(pelicula);
   } catch (err) {
     res.status(500).json(err);
