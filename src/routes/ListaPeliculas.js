@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
 });
 
 //OBTENER SEGUN ID
-router.get("/:id", async (req, res) => {
+router.get("/find/:id", async (req, res) => {
   try {
     const lista = await ListaPeliculas.findById(req.params.id);
     res.status(200).json(lista);
@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // OBTENER SEGUN TIPO
-router.get("/random", async (req, res) => {
+router.get("/filterList", async (req, res) => {
   const tipoQuery = req.query.tipo;
   const generoQuery = req.query.genero;
   let lista = [];
