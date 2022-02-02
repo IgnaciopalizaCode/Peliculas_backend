@@ -32,8 +32,15 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     await Pelicula.findByIdAndDelete(req.params.id);
+    const listas = await ListaPeliculas.find({ contenido: req.params.id });
+    for (const lista of listas) {
+      lista.contenido = lista.contenido.filter(
+        (elemento) => elemento !== req.params.id
+      );
+      console.log(lista.contenido);
+      await lista.save();
+    }
     res.status(200).json("La pelicula fue borrada");
-    toast.success("Elemento borrado");
   } catch (err) {
     res.status(500).json(err);
   }

@@ -3,7 +3,8 @@ const ListaPeliculas = require("../models/ListaPeliculas.js");
 
 //CREAR
 router.post("/", async (req, res) => {
-  const nuevaListaPeliculas = new ListaPeliculas(req.body);
+  const {nombre, genero, tipo} = req.body
+  const nuevaListaPeliculas = new ListaPeliculas({nombre, genero, tipo});
   try {
     const listaPeliculaGuardada = await nuevaListaPeliculas.save();
     res.status(201).json(listaPeliculaGuardada);
@@ -72,7 +73,7 @@ router.get("/filterList", async (req, res) => {
 });
 
 //MODIFICAR
-router.put("/:id", async (req, res) => {
+router.put("/find/:id", async (req, res) => {
   try {
     const listaPeliculasMdificada = await ListaPeliculas.findByIdAndUpdate(
       req.params.id,
