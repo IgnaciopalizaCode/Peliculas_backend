@@ -21,7 +21,7 @@ const Pelicula = require('../models/Pelicula')
 
 
 console.log("ejecutado en index js")
-app.listen(process.env.PORT, ()=>{
+app.listen(process.env.PORT || 4001, ()=>{
     console.log(`ejecutando servidor en puerto ${process.env.PORT}`)
 })
 app.get('/',(req,res)=>{
