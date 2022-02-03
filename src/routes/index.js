@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
+const session = require('express-session');
 const database = require('./database.js');
 const  mongoose  = require('mongoose');
 const peliculaRoute = require("./Peliculas")
@@ -11,14 +12,18 @@ const listaPeliculaRoute = require("./ListaPeliculas")
 //middlewares
 app.use(cors())
 app.use(express.json())
+
 app.use("/api/peliculas", peliculaRoute)
 app.use("/api/listapeliculas", listaPeliculaRoute)
 
 
 //modelos de datos
-const Usuario = require('../models/Usuario')
-const Pelicula = require('../models/Pelicula')
 
+const Usuario = require('../models/Usuario');
+const Pelicula = require('../models/Pelicula');
+const { Redirect } = require('request/lib/redirect');
+const { redirect } = require('express/lib/response');
+require('dotenv').config();
 
 console.log("ejecutado en index js")
 app.listen(process.env.PORT || 4001, ()=>{
@@ -59,4 +64,53 @@ app.delete('/usuarios',(req,res) => {
 
 
 
+
+app.post('/register', (req, res) => 
+{
+    let data = req.body
+
+    Usuario.getUsuarioByEmail(data.email)
+    .then((user) => {
+        if(user)
+        {
+            res.send("ya existe un usuario registrado con ese correo");
+        }
+        else
+        {
+            const usuario = Usuario.createUsuario(data);
+            if(usuario)
+            {
+              res.send({message:"Registro Exitoso"});
+            }
+            else
+            {
+              res.send({message:"Datos Invalidos"})
+            }
+        }
+    });
+})
+
+app.get('/logIn' ,(req ,res) => {
+    let data = req.body;
+    Usuario.getUsuarioByEmail(data.email)
+    .then((user) => {
+        if(user)
+        {
+            console.log(bcrypt.compareSync(data.contrasenia, user.contrasenia))
+            if(bcrypt.compareSync(data.contrasenia, user.contrasenia))
+            {
+              res.send(user);
+              redirect('/');
+            }
+            else
+            {
+                res.send("Contraseña incorrecta");
+            }
+           
+        }else
+        {
+            res.send("Usuario Inexistente");
+        }
+    });
+})
 
