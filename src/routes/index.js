@@ -1,10 +1,9 @@
-const express = require('express');
+const express = require('express')
 const app = express();
 const cors = require('cors');
 const session = require('express-session');
 const database = require('./database.js');
 const  mongoose  = require('mongoose');
-const bcrypt = require('bcrypt');
 const peliculaRoute = require("./Peliculas")
 const listaPeliculaRoute = require("./ListaPeliculas")
 
@@ -19,16 +18,15 @@ app.use("/api/listapeliculas", listaPeliculaRoute)
 
 
 //modelos de datos
+
 const Usuario = require('../models/Usuario');
 const Pelicula = require('../models/Pelicula');
 const { Redirect } = require('request/lib/redirect');
 const { redirect } = require('express/lib/response');
 require('dotenv').config();
 
-
 console.log("ejecutado en index js")
-
-app.listen(process.env.PORT, ()=>{
+app.listen(process.env.PORT || 4001, ()=>{
     console.log(`ejecutando servidor en puerto ${process.env.PORT}`)
 })
 app.get('/',(req,res)=>{
@@ -51,11 +49,6 @@ app.get('/usuarios',(req,res) => {
     //Usuario.find().populate('peliculas');
     console.log("GET USUARIOS")
 })
-app.get('/usuarios/:nombre',(req,res) => {
-    let nombre= req.params.nombre;
-    //Usuario.find().populate('peliculas');
-    console.log("GET USUARIOS")
-})
 
 app.put('/usuarios',(req,res) => {
     console.log("PUT USUARIOS")
@@ -66,6 +59,7 @@ app.patch('/usuarios',(req,res) => {
 app.delete('/usuarios',(req,res) => {
     console.log("DELETE USUARIOS")
 })
+
 
 
 

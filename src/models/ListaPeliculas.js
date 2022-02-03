@@ -4,7 +4,7 @@ const listaPeliculasSchema = mongoose.Schema({
   nombre: { type: String, required: true },
   genero: { type: String },
   tipo: { type: String },
-  contenido: { type: Array },
+  contenido: { type: Array }  
 });
 
 const ListaPeliculas = mongoose.model(

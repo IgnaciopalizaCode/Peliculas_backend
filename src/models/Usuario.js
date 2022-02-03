@@ -9,11 +9,9 @@ const usuarioSchema = new Schema({
     admin: {type: Boolean, default:false},
     peliculas: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pelicula'        },//TODO vincular con peliculas
-    eliminado: {type: Boolean, default:false}
+        ref: 'Pelicula'        }//TODO vincular con peliculas
 })
 const Usuario = mongoose.model('Usuario',usuarioSchema)
-
 
 function getUsuarioByNombre(nombreU){
     const usuario = Usuario.findOne(nombreU);
